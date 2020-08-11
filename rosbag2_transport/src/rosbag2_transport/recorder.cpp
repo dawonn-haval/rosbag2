@@ -16,6 +16,8 @@
 
 #include <algorithm>
 #include <future>
+#include <iomanip>
+#include <iostream>
 #include <memory>
 #include <stdexcept>
 #include <string>
@@ -188,6 +190,16 @@ Recorder::create_subscription(
           "Error getting current time. Error:" << rcutils_get_error_string().str);
       }
       bag_message->time_stamp = time_stamp;
+
+      // HAVAL DEBUG
+      ++msgCount_[bag_message->topic_name];
+      if (!(++skipcnt_ % 100)) {
+        std::cout << std::endl << "=====================================" << std::endl;
+        for (auto x : msgCount_) {
+          std::cout << std::left << std::setw(30) << x.first << std::right << std::setw(7)
+                    << x.second << std::endl;
+        }
+      }
 
       writer_->write(bag_message);
     });

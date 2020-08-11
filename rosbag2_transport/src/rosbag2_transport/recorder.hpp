@@ -107,6 +107,10 @@ private:
   std::unordered_set<std::string> topics_warned_about_incompatibility_;
   std::string serialization_format_;
   std::unordered_map<std::string, rclcpp::QoS> topic_qos_profile_overrides_;
+
+  // HAVAL DEBUG
+  int skipcnt_ = 0;
+  std::map<std::string, int> msgCount_;
 };
 
 }  // namespace rosbag2_transport
