@@ -16,6 +16,9 @@
 #define ROSBAG2_TRANSPORT__RECORDER_HPP_
 
 #include <future>
+#include <iomanip>
+#include <iostream>
+#include <map>
 #include <memory>
 #include <string>
 #include <unordered_map>
@@ -27,50 +30,49 @@
 #include "rosbag2/writer.hpp"
 #include "rosbag2_transport/record_options.hpp"
 
-namespace rosbag2
-{
+namespace rosbag2 {
 class Writer;
 }
 
-namespace rosbag2_transport
-{
+namespace rosbag2_transport {
 
 class GenericSubscription;
 class Rosbag2Node;
 
-class Recorder
-{
-public:
-  explicit Recorder(std::shared_ptr<rosbag2::Writer> writer, std::shared_ptr<Rosbag2Node> node);
+class Recorder {
+   public:
+    explicit Recorder(std::shared_ptr<rosbag2::Writer> writer, std::shared_ptr<Rosbag2Node> node);
 
-  void record(const RecordOptions & record_options);
+    void record(const RecordOptions& record_options);
 
-private:
-  void topics_discovery(
-    std::chrono::milliseconds topic_polling_interval,
-    const std::vector<std::string> & requested_topics = {});
+   private:
+    void topics_discovery(std::chrono::milliseconds topic_polling_interval,
+                          const std::vector<std::string>& requested_topics = {});
 
-  std::unordered_map<std::string, std::string>
-  get_requested_or_available_topics(const std::vector<std::string> & requested_topics);
+    std::unordered_map<std::string, std::string> get_requested_or_available_topics(
+        const std::vector<std::string>& requested_topics);
 
-  std::unordered_map<std::string, std::string>
-  get_missing_topics(const std::unordered_map<std::string, std::string> & topics);
+    std::unordered_map<std::string, std::string> get_missing_topics(
+        const std::unordered_map<std::string, std::string>& topics);
 
-  void subscribe_topics(
-    const std::unordered_map<std::string, std::string> & topics_and_types);
+    void subscribe_topics(const std::unordered_map<std::string, std::string>& topics_and_types);
 
-  void subscribe_topic(const rosbag2::TopicMetadata & topic);
+    void subscribe_topic(const rosbag2::TopicMetadata& topic);
 
-  std::shared_ptr<GenericSubscription> create_subscription(
-    const std::string & topic_name, const std::string & topic_type);
+    std::shared_ptr<GenericSubscription> create_subscription(const std::string& topic_name,
+                                                             const std::string& topic_type);
 
-  void record_messages() const;
+    void record_messages() const;
 
-  std::shared_ptr<rosbag2::Writer> writer_;
-  std::shared_ptr<Rosbag2Node> node_;
-  std::vector<std::shared_ptr<GenericSubscription>> subscriptions_;
-  std::unordered_set<std::string> subscribed_topics_;
-  std::string serialization_format_;
+    std::shared_ptr<rosbag2::Writer> writer_;
+    std::shared_ptr<Rosbag2Node> node_;
+    std::vector<std::shared_ptr<GenericSubscription>> subscriptions_;
+    std::unordered_set<std::string> subscribed_topics_;
+    std::string serialization_format_;
+
+    // HAVAL DEBUG
+    int skipcnt_ = 0;
+    std::map<std::string, int> msgCount_;
 };
 
 }  // namespace rosbag2_transport
