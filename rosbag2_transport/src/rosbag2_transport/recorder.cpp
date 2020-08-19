@@ -139,18 +139,17 @@ Recorder::create_subscription(
       bag_message->time_stamp = time_stamp;
 
       writer_->write(bag_message);
-      
-      
+
+
       // HAVAL DEBUG
       ++msgCount_[bag_message->topic_name];
       if (!(++skipcnt_ % 100)) {
         std::cout << std::endl << "=====================================" << std::endl;
         for (auto x : msgCount_) {
-          std::cout << std::left << std::setw(30) << x.first << std::right << std::setw(7)
-                    << x.second << std::endl;
+          std::cout << std::left << std::setw(30) << x.first << std::right << std::setw(7) <<
+          x.second << std::endl;
         }
       }
-
     });
   return subscription;
 }
